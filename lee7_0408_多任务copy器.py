@@ -48,10 +48,10 @@ def main():
     copy_complete = 0
     while True:
         file_name = q.get()
-        print("已经完成COPY：%s" % file_name)
+        # print("已经完成COPY：%s" % file_name)
         copy_complete += 1
         a = copy_complete/all_file_num*100
-        print("已经拷贝百分之%.2f" % a)
+        print("已经拷贝%.2f %%" % a)
 
         if copy_complete >= all_file_num:
             break
