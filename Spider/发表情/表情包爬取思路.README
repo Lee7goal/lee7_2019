@@ -1,0 +1,53 @@
+﻿
+
+# 1.先从这个网站爬取如下的具体页面url以及标题
+for i in range(1, 940):
+	link = f'https://fabiaoqing.com/bqb/lists/type/hot/page/{i}.html'
+
+"""
+用 name='a' attrs={'class', 'bqba'} 获取href
+然后字符串拼接'https://fabiaoqing.com' + {href}
+获得真实际地址 
+"""
+
+# 2. 然后从上面获取到的拼接地址爬取表情的真实地址
+
+"""
+直接使用find_all 获取 name='img', attrs={'class', 'bqbppdetail lazy'} get('src')
+获取到的就是表情包实际地址了
+
+"""
+
+# 3.进行下载
+
+"""
+直接贴一个并发协程下载器(自己写的！)
+
+"""
+import urllib.request
+import gevent
+from gevent import monkey
+monkey.patch_all()
+
+
+def dl(img_name, img_url):
+
+    req = urllib.request.urlopen(img_url)
+
+    img_content = req.read()
+
+    with open(img_name, "wb") as f:
+        f.write(img_content)
+
+
+def main():
+    gevent.joinall([
+        gevent.spawn(dl, '1.jpg', 'https://rpic.douyucdn.cn/live-cover/appCovers/2019/04/01/6707439_20190401000838_small.jpg'),
+        gevent.spawn(dl, '2.jpg', 'https://rpic.douyucdn.cn/live-cover/appCovers/2019/04/05/866405_20190405135436_small.jpg'),
+        gevent.spawn(dl, '3.jpg', 'https://rpic.douyucdn.cn/live-cover/appCovers/2019/03/19/4531142_20190319181313_small.jpg'),
+    ])
+    print("下载成功")
+
+
+if __name__ == "__main__":
+    main()
